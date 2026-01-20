@@ -6,7 +6,7 @@ using System.Text.Json;
 
 namespace ReactApp1.Server.Infrastructure.Http
 {
-    public class DirectionsService
+    public class DirectionsService : IDirectionsService
     {
         private readonly HttpClient _httpClient;
         private readonly string _token;
