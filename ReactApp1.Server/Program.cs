@@ -61,7 +61,7 @@ builder.Services.Configure<MapBoxOptions>(
 builder.Services.AddTransient<MapBoxDirections>();
 
 // DirectionsService is added here
-builder.Services.AddHttpClient<DirectionsService>(client =>
+builder.Services.AddHttpClient<IDirectionsService, DirectionsService>(client =>
 {
     client.BaseAddress = new Uri("https://api.mapbox.com/directions/v5/mapbox/driving-traffic/");
 });
@@ -94,7 +94,7 @@ builder.Services.AddOptions<MapboxOptions>()
     .Validate(options => !string.IsNullOrEmpty(options.MapboxToken), "MapboxToken is missing from configuration!")
     .ValidateOnStart();
 
-builder.Services.AddHttpClient("MapBox", httpClient =>
+builder.Services.AddHttpClient("Mapbox", httpClient =>
 {
     httpClient.BaseAddress = new Uri("https://api.mapbox.com");
     httpClient.DefaultRequestHeaders.Accept.ParseAdd("application/json");
