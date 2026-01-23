@@ -87,6 +87,13 @@ builder.Services.AddHttpClient("OutageDataSource", HttpClient =>
 
 var mapboxSecret = builder.Configuration["Mapbox"];
 
+MapboxOptions token = new();
+
+builder.Services.AddOptions<MapboxOptions>()
+    .Bind(builder.Configuration)
+    .Validate(options => !string.IsNullOrEmpty(options.MapboxToken), "MapboxToken is missing from configuration!")
+    .ValidateOnStart();
+
 builder.Services.AddHttpClient("MapBox", httpClient =>
 {
     httpClient.BaseAddress = new Uri("https://api.mapbox.com");

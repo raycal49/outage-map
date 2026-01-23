@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Options;
 using ReactApp1.Server.Dtos;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text.Json;
@@ -11,10 +12,10 @@ namespace ReactApp1.Server.Infrastructure.Http
         private readonly HttpClient _httpClient;
         private readonly string _token;
 
-        public DirectionsService(HttpClient httpClient, IConfiguration config)
+        public DirectionsService(HttpClient httpClient, IOptions<MapboxOptions> MapboxOpts)
         {
             _httpClient = httpClient;
-            _token = config["Mapbox"];
+            _token = MapboxOpts.Value.MapboxToken;
         }
 
         // okay... so this works but... is this even testable?
