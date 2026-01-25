@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
+﻿using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using ReactApp1.Server.Dtos;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text.Json;
 
 namespace ReactApp1.Server.Infrastructure.Http
 {
