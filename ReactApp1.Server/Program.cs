@@ -80,11 +80,6 @@ builder.Services.AddStackExchangeRedisCache(options =>
     options.Configuration = connectionString;
 });
 
-builder.Services.AddHttpClient("OutageDataSource", HttpClient =>
-{
-    HttpClient.BaseAddress = new Uri("https://centerpoint.datacapable.com/datacapable/v2/p/centerpoint/r/texas/map/events");
-});
-
 var mapboxSecret = builder.Configuration["Mapbox"];
 
 MapboxOptions token = new();

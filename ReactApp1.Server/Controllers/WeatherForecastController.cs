@@ -3,11 +3,14 @@ using Microsoft.Extensions.Caching.Distributed;
 using ReactApp1.Server.Models;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using Route = ReactApp1.Server.Dtos.Route;
 using ReactApp1.Server.Dtos;
 using System.Net.NetworkInformation;
 using NetTopologySuite;
 using ReactApp1.Server.Infrastructure.Http;
+using System.Threading.Tasks;
+
+using static ReactApp1.Server.Models.GeoJsonConversions;
+using Route = ReactApp1.Server.Dtos.Route;
 
 namespace ReactApp1.Server.Controllers
 {
@@ -16,34 +19,28 @@ namespace ReactApp1.Server.Controllers
     public class MetroRouteController : ControllerBase
     {
         private readonly IDirectionsService _directionsService;
+        private readonly IOutageService _outageService;
         private readonly IHttpClientFactory _clientFactory;
         private readonly IDistributedCache _cache;
         private readonly AppDbContext _dbService;
         private readonly IConfiguration _config;
 
         public MetroRouteController(IHttpClientFactory clientFactory, IDistributedCache cache, AppDbContext dbService,
-            IDirectionsService directionsService)
+            IDirectionsService directionsService, IOutageService outageService)
         {
             _clientFactory = clientFactory;
             _cache = cache;
             _dbService = dbService;
             _directionsService = directionsService;
+            _outageService = outageService;
         }
 
-
-
         [HttpGet("OutageData")]
-        public ActionResult GetOutageData()
+        public async Task<ActionResult> GetOutageData()
         {
-            //var client = _clientFactory.CreateClient("OutageDataSource");
+            var outageDto = await _outageService.GetOutageData();
 
-            //var response = await client.GetStringAsync(client.BaseAddress);
-
-            var json = System.IO.File.ReadAllText("Fixtures/events.json");
-
-            var dataDto = JsonSerializer.Deserialize<List<OutageDataDto>>(json);
-
-            var outageGeoJson = GeoJsonConversions.ConvertToFeatureCollection(dataDto);
+            var outageGeoJson = ConvertToFeatureCollection(outageDto);
 
             return Ok(outageGeoJson);
         }
