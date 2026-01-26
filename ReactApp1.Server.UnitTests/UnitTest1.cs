@@ -18,8 +18,9 @@ namespace ReactApp1.Server.UnitTests
 
         public DirectionsServiceClientTests ()
         {
-            //_handlerMock.When("https://api.mapbox.com/directions/v5/mapbox/driving-traffic/*")
-            //        .Respond("application/json", "{'name' : 'value'}");
+            _clientMock = _handlerMock.ToHttpClient();
+            _clientMock.BaseAddress = new Uri("https://api.mapbox.com/directions/v5/mapbox/driving-traffic/*");
+            _sut = new DirectionsService(_clientMock, _options);
         }
 
         [Fact]
@@ -34,11 +35,6 @@ namespace ReactApp1.Server.UnitTests
             _handlerMock.When("https://api.mapbox.com/directions/v5/mapbox/driving-traffic/*")
                     .Respond(HttpStatusCode.NotFound, "application/json", json);
 
-            _clientMock = _handlerMock.ToHttpClient();
-            _clientMock.BaseAddress = new Uri("https://api.mapbox.com/directions/v5/mapbox/driving-traffic/");
-
-            _sut = new DirectionsService(_clientMock, _options);
-
            await Assert.ThrowsAsync<HttpRequestException>(() => _sut.GetDirections("-95.3698;29.7604"));
         }
 
@@ -47,17 +43,13 @@ namespace ReactApp1.Server.UnitTests
         {
             var json = """
                        {
+
                             "name": "value"
                        }
                        """;
 
             _handlerMock.When("https://api.mapbox.com/directions/v5/mapbox/driving-traffic/*")
                    .Respond(HttpStatusCode.OK, "application/json", json);
-
-            _clientMock = _handlerMock.ToHttpClient();
-            _clientMock.BaseAddress = new Uri("https://api.mapbox.com/directions/v5/mapbox/driving-traffic/");
-
-            _sut = new DirectionsService(_clientMock, _options);
 
             var result = await _sut.GetDirections("-95.3698;29.7604");
 
