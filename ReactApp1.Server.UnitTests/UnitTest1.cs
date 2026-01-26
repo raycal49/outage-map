@@ -1,14 +1,16 @@
 using Microsoft.Extensions.Options;
+using ReactApp1.Server.Dtos;
 using ReactApp1.Server.Infrastructure.Http;
 using RichardSzalay.MockHttp;
+using System.Net;
 
 namespace ReactApp1.Server.UnitTests
 {
     public class DirectionsServiceClientTests
     {
-        private readonly DirectionsService _sut;
-        private readonly MockHttpMessageHandler _handlerMock = new();
-        private readonly HttpClient _clientMock;
+        private DirectionsService _sut;
+        private MockHttpMessageHandler _handlerMock = new();
+        private HttpClient _clientMock;
         private readonly IOptions<MapboxOptions> _options = Options.Create(new MapboxOptions
         {
             MapboxToken = "pk.1"
@@ -16,18 +18,50 @@ namespace ReactApp1.Server.UnitTests
 
         public DirectionsServiceClientTests ()
         {
-            _handlerMock.When("https://api.mapbox.com/directions/v5/mapbox/driving-traffic/*")
-                    .Respond("application/json", "{'name' : 'value'}");
-
-            var _clientMock = _handlerMock.ToHttpClient();
-
-            _sut = new DirectionsService(_clientMock, _options);
+            //_handlerMock.When("https://api.mapbox.com/directions/v5/mapbox/driving-traffic/*")
+            //        .Respond("application/json", "{'name' : 'value'}");
         }
 
         [Fact]
-        public void Test1()
+        public async Task DirectionsService_ReceivesHttpStatusCodeNot2xx_ThrowException()
         {
-            Assert.Equal(1, 1);
+            var json = """
+                        {
+                            "message": "Resource Not Found!"
+                        }
+                        """;
+
+            _handlerMock.When("https://api.mapbox.com/directions/v5/mapbox/driving-traffic/*")
+                    .Respond(HttpStatusCode.NotFound, "application/json", json);
+
+            _clientMock = _handlerMock.ToHttpClient();
+            _clientMock.BaseAddress = new Uri("https://api.mapbox.com/directions/v5/mapbox/driving-traffic/");
+
+            _sut = new DirectionsService(_clientMock, _options);
+
+           await Assert.ThrowsAsync<HttpRequestException>(() => _sut.GetDirections("-95.3698;29.7604"));
+        }
+
+        [Fact]
+        public async Task DirectionsService_ReceivesHttpStatusCode2xx_ReturnsDto()
+        {
+            var json = """
+                       {
+                            "name": "value"
+                       }
+                       """;
+
+            _handlerMock.When("https://api.mapbox.com/directions/v5/mapbox/driving-traffic/*")
+                   .Respond(HttpStatusCode.OK, "application/json", json);
+
+            _clientMock = _handlerMock.ToHttpClient();
+            _clientMock.BaseAddress = new Uri("https://api.mapbox.com/directions/v5/mapbox/driving-traffic/");
+
+            _sut = new DirectionsService(_clientMock, _options);
+
+            var result = await _sut.GetDirections("-95.3698;29.7604");
+
+            Assert.IsType<DirectionsResponseDto>(result);
         }
     }
 }

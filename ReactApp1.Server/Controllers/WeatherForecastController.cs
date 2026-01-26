@@ -15,14 +15,14 @@ namespace ReactApp1.Server.Controllers
     [Route("[controller]")]
     public class MetroRouteController : ControllerBase
     {
-        private readonly DirectionsService _directionsService;
+        private readonly IDirectionsService _directionsService;
         private readonly IHttpClientFactory _clientFactory;
         private readonly IDistributedCache _cache;
         private readonly AppDbContext _dbService;
         private readonly IConfiguration _config;
 
         public MetroRouteController(IHttpClientFactory clientFactory, IDistributedCache cache, AppDbContext dbService,
-            DirectionsService directionsService)
+            IDirectionsService directionsService)
         {
             _clientFactory = clientFactory;
             _cache = cache;

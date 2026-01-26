@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using ReactApp1.Server.Dtos;
+using System.Text.Json;
+using Xunit.Sdk;
 
 namespace ReactApp1.Server.Infrastructure.Http
 {
@@ -15,7 +17,6 @@ namespace ReactApp1.Server.Infrastructure.Http
             _token = MapboxOpts.Value.MapboxToken;
         }
 
-        // okay... so this works but... is this even testable?
         public async Task<DirectionsResponseDto> GetDirections(string coordinates)
         {
             var queryString = new Dictionary<string, string?>()
@@ -30,9 +31,17 @@ namespace ReactApp1.Server.Infrastructure.Http
 
             var url = QueryHelpers.AddQueryString(coordinates, queryString);
 
-            var res = await _httpClient.GetFromJsonAsync<DirectionsResponseDto>(url);
+            var response = await _httpClient.GetAsync(url);
+            if (response.IsSuccessStatusCode == false)
+            {
+                var responseBody = await response.Content.ReadFromJsonAsync<System.Text.Json.Nodes.JsonObject>();
+                var message = responseBody!["message"]!.ToString();
+                throw new HttpRequestException(message);
+            }
 
-            return res;
+            var dto = await response.Content.ReadFromJsonAsync<DirectionsResponseDto>();
+
+            return dto;
         }
 
     }

@@ -61,16 +61,10 @@ builder.Services.Configure<MapBoxOptions>(
 builder.Services.AddTransient<MapBoxDirections>();
 
 // DirectionsService is added here
-//builder.Services.AddHttpClient<IDirectionsService, DirectionsService>(client =>
-//{
-//    client.BaseAddress = new Uri("https://api.mapbox.com/directions/v5/mapbox/driving-traffic/");
-//});
-
-builder.Services.AddHttpClient<IDirectionsService, DirectionsService>(httpClient =>
+builder.Services.AddHttpClient<IDirectionsService, DirectionsService>(client =>
 {
-    httpClient.BaseAddress = new Uri("https://api.mapbox.com/directions/v5/mapbox/driving-traffic/");
+    client.BaseAddress = new Uri("https://api.mapbox.com/directions/v5/mapbox/driving-traffic/");
 });
-
 
 // with the two above blocks of code defined, we can inject our DbContext into our web app
 // while still adhering to MVC.
