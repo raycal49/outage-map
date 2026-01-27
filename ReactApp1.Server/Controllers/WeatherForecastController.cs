@@ -19,7 +19,7 @@ namespace ReactApp1.Server.Controllers
     public class MetroRouteController : ControllerBase
     {
         private readonly IDirectionsService _directionsService;
-        private readonly IOutageService _outageService;
+        //private readonly IOutageService _outageService;
         private readonly IHttpClientFactory _clientFactory;
         private readonly IDistributedCache _cache;
         private readonly AppDbContext _dbService;
@@ -32,18 +32,18 @@ namespace ReactApp1.Server.Controllers
             _cache = cache;
             _dbService = dbService;
             _directionsService = directionsService;
-            _outageService = outageService;
+            //_outageService = outageService;
         }
 
-        [HttpGet("OutageData")]
-        public async Task<ActionResult> GetOutageData()
-        {
-            var outageDto = await _outageService.GetOutageData();
+        //[HttpGet("OutageData")]
+        //public async Task<ActionResult> GetOutageData()
+        //{
+        //    var outageDto = await _outageService.GetOutageData();
 
-            var outageGeoJson = ConvertToFeatureCollection(outageDto);
+        //    var outageGeoJson = ConvertToFeatureCollection(outageDto);
 
-            return Ok(outageGeoJson);
-        }
+        //    return Ok(outageGeoJson);
+        //}
 
         [HttpGet("Directions")]
         public async Task<ActionResult<DirectionsResponseDto>> GetDirections(string coordinates)

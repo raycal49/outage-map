@@ -46,6 +46,10 @@ export default defineConfig({
             '^/MetroRoute': {
                 target,
                 secure: false
+            },
+            '^/OutageMap': {
+                target,
+                secure: false
             }
         },
         port: 5173,

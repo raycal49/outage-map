@@ -74,7 +74,7 @@ function MyMap() {
 
     useEffect(() => {
         (async () => {
-            const res = await fetch("MetroRoute/OutageData");
+            const res = await fetch("/OutageMap/OutageData");
             if (!res.ok) throw new Error(`OutageData failed (${res.status})`);
             const fc = await res.json();
             setOutageFc(fc);

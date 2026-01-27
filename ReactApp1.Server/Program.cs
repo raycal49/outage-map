@@ -66,6 +66,11 @@ builder.Services.AddHttpClient<IDirectionsService, DirectionsService>(client =>
     client.BaseAddress = new Uri("https://api.mapbox.com/directions/v5/mapbox/driving-traffic/");
 });
 
+builder.Services.AddHttpClient<IOutageService,OutageService>(client =>
+{
+    client.BaseAddress = new Uri("https://centerpoint.datacapable.com/datacapable/v2/p/centerpoint/r/texas/map/events");
+});
+
 // with the two above blocks of code defined, we can inject our DbContext into our web app
 // while still adhering to MVC.
 
@@ -79,6 +84,7 @@ builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = connectionString;
 });
+
 
 var mapboxSecret = builder.Configuration["Mapbox"];
 
