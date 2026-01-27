@@ -6,7 +6,7 @@ using System.Net;
 
 namespace ReactApp1.Server.UnitTests
 {
-    public class DirectionsServiceClientTests
+    public class DirectionsServiceTests
     {
         private DirectionsService _sut;
         private MockHttpMessageHandler _handlerMock = new();
@@ -16,7 +16,7 @@ namespace ReactApp1.Server.UnitTests
             MapboxToken = "pk.1"
         });
 
-        public DirectionsServiceClientTests ()
+        public DirectionsServiceTests ()
         {
             _clientMock = _handlerMock.ToHttpClient();
             _clientMock.BaseAddress = new Uri("https://api.mapbox.com/directions/v5/mapbox/driving-traffic/*");
