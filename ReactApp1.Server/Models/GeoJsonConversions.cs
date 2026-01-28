@@ -14,22 +14,12 @@ namespace ReactApp1.Server.Models
         {
             var geoFactory = NtsGeometryServices.Instance.CreateGeometryFactory(srid: 4326);
 
-            //var json = JsonSerializer.Serialize<OutageDataDto>(dto);
-
             var featureCollection = new FeatureCollection();
-
-            //  remember that Geojson looks like this:
-            //  Type: (Feature or FeatureCollection)
-            //  Geometry: (Point, Linestring....Mult-point)
-            //  Properties: (Anything not a geometry)
-            // we have a Type key, Geometry key, and a Properties key on the lhs.
 
             foreach (var d in dto)
             {
-                // this corresponds to the Geometry key above
                 var geom = geoFactory.CreatePoint(new Coordinate(d.Longitude, d.Latitude));
 
-                // this corresponds to the Properties key above
                 var properties = new AttributesTable
                 {
                     { "id", d.Id },

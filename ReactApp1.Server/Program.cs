@@ -13,10 +13,6 @@ using System.Runtime.Intrinsics;
 using System.Text.Json.Serialization;
 using static NetTopologySuite.Geometries.Utilities.GeometryMapper;
 
-// Cause of your runtime error:
-// Login failed because the target database ReactApp1Db does not exist yet (or user lacks access).
-// Fix: ensure database is created / migrations applied before first usage and enable retry strategy.
-
 var opts = new WebApplicationOptions
 {
     Args = args,
@@ -45,7 +41,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connString, o =>
     {
         o.UseNetTopologySuite();
-        // Adds transient failure resiliency suggested by the exception message.
         o.EnableRetryOnFailure();
     });
 
@@ -55,12 +50,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 });
 
-// this is where we grab the token from secrets.json!
 builder.Services.Configure<MapBoxOptions>(
-    builder.Configuration.GetSection("Mapbox")); // binds MapBox:Token
+    builder.Configuration.GetSection("Mapbox"));
 builder.Services.AddTransient<MapBoxDirections>();
 
-// DirectionsService is added here
+
 builder.Services.AddHttpClient<IDirectionsService, DirectionsService>(client =>
 {
     client.BaseAddress = new Uri("https://api.mapbox.com/directions/v5/mapbox/driving-traffic/");
@@ -71,13 +65,6 @@ builder.Services.AddHttpClient<IOutageService,OutageService>(client =>
     client.BaseAddress = new Uri("https://centerpoint.datacapable.com/datacapable/v2/p/centerpoint/r/texas/map/events");
 });
 
-// with the two above blocks of code defined, we can inject our DbContext into our web app
-// while still adhering to MVC.
-
-// GetConnectionString("Redis") is shorthand for GetSection("ConnectionStrings")["Redis"], if I recall correctly.
-// it navigates to where connection strings are stored, in the key ConnectionStrings and specifically looks for the connection
-// string for "Redis", where "Redis" is probably a key and the associated value is likely
-// the connectionString for "Redis", if I had to guess.
 string connectionString = builder.Configuration.GetConnectionString("Redis");
 
 builder.Services.AddStackExchangeRedisCache(options =>
@@ -107,31 +94,15 @@ builder.Services.AddMapBoxGeocoding()
 
 builder.Services.AddControllers().AddJsonOptions(o =>
 {
-    o.JsonSerializerOptions.Converters.Add(new NetTopologySuite.IO.Converters.GeoJsonConverterFactory()); // if you use NTS GeoJSON
+    o.JsonSerializerOptions.Converters.Add(new NetTopologySuite.IO.Converters.GeoJsonConverterFactory());
     o.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals;
     o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
-
-//builder.Services.AddControllers().AddJsonOptions(o =>
-//{
-//    o.JsonSerializerOptions.Converters.Add(new NetTopologySuite.IO.Converters.GeoJsonConverterFactory()); // if you use NTS GeoJSON
-//    o.JsonSerializerOptions.NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals;
-//});
-
 var app = builder.Build();
-
-// Ensure database exists / migrations applied before handling requests (prevents login failure).
-//using (var scope = app.Services.CreateScope())
-//{
-//    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-//    // Applies pending migrations (creates DB if it does not exist).
-//    db.Database.Migrate();
-//}
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

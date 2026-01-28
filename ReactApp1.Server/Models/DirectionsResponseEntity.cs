@@ -5,10 +5,6 @@ using NetTopologySuite.Geometries;
 
 namespace ReactApp1.Server.Models;
 
-// need to add a proper id again to DirectionsResponseEntity
-// that's the way we would be able to grab the first 100, 200, or whatever we wanted
-// replace the parts of this that say `null!` and replace them with actual delineated foreign keys
-
 public class DirectionsResponseEntity
 {
     [Key]
@@ -55,10 +51,6 @@ public class WaypointEntity
 
     public double[] Location { get; set; }
 
-    //public double Latitude { get; set; }
-
-    //public double Longitude { get; set; }
-
     public double Distance { get; set; }
 }
 
@@ -67,8 +59,8 @@ public class RouteLegEntity
     [Key]
     public int Id { get; set; }
 
-    public int RouteEntityRouteId { get; set; } // should be RouteEntityId, apparently as it should match in the Id and Entity way like in RouteEntity for
-                                                // its containing entity DirectionsResponseEntity
+    public int RouteEntityRouteId { get; set; }
+                                                
 
     public RouteEntity RouteEntity { get; set; }
 

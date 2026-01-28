@@ -1,6 +1,5 @@
 ﻿using System.Text.Json.Serialization;
 
-// need to change these to use JsonPropertyNames so i follow C# class naming conventions
 namespace ReactApp1.Server.Dtos
 {
     public sealed class DirectionsResponseDto
@@ -11,9 +10,6 @@ namespace ReactApp1.Server.Dtos
 
         public List<Waypoint>? waypoints { get; init; }
     }
-
-    // need to add the following to Route
-    // distance_typical, duration_typical,
     public sealed class Route
     {
         public double? distance { get; init; }
@@ -30,19 +26,9 @@ namespace ReactApp1.Server.Dtos
 
         public double[] location { get; init; }
 
-        //public double longitude { get; init; }
-
-        //public double latitude { get; init; }
-
         public double distance { get; init; }
     }
 
-    // for annotations need to add annotations query parameters, see mapbox api docs
-    // need to add the following to RouteLeg
-    // distance_typical, duration_typical, summary, annotation.speed
-    // annotation.duration, annotation.distance, annotation.congestion_numeric
-    // and maybe add these
-    // incidents, closures
     public sealed class RouteLeg
     {
         public string? summary { get; init; }
@@ -51,18 +37,11 @@ namespace ReactApp1.Server.Dtos
         public double? weight { get; init; }
     }
 
-    // maybe add route step but idk
-
-    // and maybe add a step object
-
-    // possibly incidents too
-
     public sealed class GeoJsonLineString
     {
         [JsonPropertyName("type")]
         public string Type { get; init; } = "LineString";
 
-        // Each position is [longitude, latitude]
         [JsonPropertyName("coordinates")]
         public List<double[]> Coordinates { get; init; } = new();
     }

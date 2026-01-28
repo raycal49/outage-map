@@ -1,12 +1,3 @@
-// Plan (pseudocode):
-// - Problem 1: onResult is optional -> invoke with optional chaining (already done).
-// - Problem 2: setMarker state inferred as null -> explicitly type useState<React.ReactElement | null>(null) (already done).
-// - Problem 3 (TS2345): Optional callbacks passed to ctrl.on -> guard registration with if statements:
-//     if (props.onLoading) ctrl.on('loading', props.onLoading);
-//     if (props.onResults) ctrl.on('results', props.onResults);
-//     if (props.onError) ctrl.on('error', props.onError);
-//   This narrows the types and avoids passing undefined to ctrl.on.
-
 import * as React from 'react';
 import { useState } from 'react';
 import { useControl, Marker, type MarkerProps, type ControlPosition } from 'react-map-gl/mapbox';
@@ -26,9 +17,7 @@ type GeocoderControlProps = Omit<GeocoderOptions, 'accessToken' | 'mapboxgl' | '
     onError?: (e: object) => void;
 };
 
-/* eslint-disable complexity,max-statements */
 export default function GeocoderControl(props: GeocoderControlProps): React.ReactElement | null {
-    // Explicit state type so we can store a Marker element or null
     const [marker, setMarker] = useState<React.ReactElement | null>(null);
 
     const geocoder = useControl<MapboxGeocoder>(
@@ -41,7 +30,6 @@ export default function GeocoderControl(props: GeocoderControlProps): React.Reac
             if (props.onLoading) ctrl.on('loading', props.onLoading);
             if (props.onResults) ctrl.on('results', props.onResults);
             ctrl.on('result', evt => {
-                // Optional callback -> guard with optional chaining to avoid TS2722
                 props.onResult?.(evt);
 
                 const { result } = evt as { result?: any };
@@ -66,7 +54,6 @@ export default function GeocoderControl(props: GeocoderControlProps): React.Reac
         }
     );
 
-    // @ts-ignore (TS2339) private member
     if (geocoder._map) {
         if (geocoder.getProximity() !== props.proximity && props.proximity !== undefined) {
             geocoder.setProximity(props.proximity);
@@ -104,7 +91,6 @@ export default function GeocoderControl(props: GeocoderControlProps): React.Reac
         if (geocoder.getOrigin() !== props.origin && props.origin !== undefined) {
             geocoder.setOrigin(props.origin);
         }
-        // Types missing from @types/mapbox__mapbox-gl-geocoder
          if (geocoder.getAutocomplete() !== props.autocomplete && props.autocomplete !== undefined) {
            geocoder.setAutocomplete(props.autocomplete);
          }

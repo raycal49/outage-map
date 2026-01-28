@@ -26,7 +26,6 @@ namespace ReactApp1.Server.Infrastructure.Http
                 ["overview"] = "full",
                 ["annotations"] = "duration,distance,speed,congestion,congestion_numeric",
                 ["steps"] = "true",
-                //["waypoints_per_route"] = "true"
             };
 
             var url = QueryHelpers.AddQueryString(coordinates, queryString);

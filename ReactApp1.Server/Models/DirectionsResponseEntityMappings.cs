@@ -37,7 +37,6 @@ namespace ReactApp1.Server.Models
             {
                 var route = new RouteEntity
                 {
-                    //DirectionsResponseUuid = dto.uuid,
                     Distance = r.distance,
                     Duration = r.duration,
                     Weight = r.weight,
@@ -59,49 +58,10 @@ namespace ReactApp1.Server.Models
                     }
                 }
                 RouteEntities.Add(route);
-
-                //if (r.waypoints is { Count: > 0 })
-                //{
-                //    foreach (var waypoint in r.waypoints)
-                //    {
-                //        route.Waypoints.Add(new WaypointEntity()
-                //        {
-                //            Name = waypoint.name,
-                //            Location = waypoint.location,
-                //            Distance = waypoint.distance
-                //        });
-                //    }
-                //}
             }
 
             return RouteEntities;
         }
-
-        //foreach (var r in dto.routes)
-        //{
-        //    var route = new RouteEntity
-        //    {
-        //        Distance = r.distance,
-        //        Duration = r.duration,
-        //        Weight = r.weight,
-        //        WeightName = r.weight_name,
-        //        Geometry = r.geometry.ToNts(),
-        //    };
-
-        //    if (r.legs is { Count: > 0 })
-        //    {
-        //        foreach (var leg in r.legs)
-        //        {
-        //            route.Legs.Add(new RouteLegEntity
-        //            {
-        //                Summary = leg.summary,
-        //                Distance = leg.distance,
-        //                Duration = leg.duration,
-        //                Weight = leg.weight
-        //            });
-        //        }
-        //    }
-        //}
 
         public static DirectionsResponseEntity ToEntity(this DirectionsResponseDto dto)
         {
@@ -135,12 +95,6 @@ namespace ReactApp1.Server.Models
                         duration = l.Duration,
                         weight = l.Weight
                     }).ToList(),
-                    //waypoints = r.Waypoints.Select(w => new Waypoint
-                    //{
-                    //    name = w.Name,
-                    //    location = w.Location,
-                    //    distance = w.Distance
-                    //}).ToList(),
                 }).ToList(),
 
                 waypoints = e.WaypointEntities.Select(r => new Waypoint
@@ -179,32 +133,5 @@ namespace ReactApp1.Server.Models
         }
 
         private static bool IsFinite(double d) => !(double.IsNaN(d) || double.IsInfinity(d));
-
-        //static GeoJsonLineString FromNts(this LineString ls) => new()
-        //{
-        //    coordinates = ls.Coordinates
-        //        .Where(c => double.IsFinite(c.X) && double.IsFinite(c.Y))
-        //        .Select(c => new[] { c.X, c.Y })
-        //        .ToList()
-        //};
-
-        //public static LineString? ToNts(this GeoJsonLineString? dto)
-        //{
-        //    if (dto is null || dto.Coordinates.Count == 0) return null;
-
-        //    var coords = new Coordinate[dto.Coordinates.Count];
-        //    for (int i = 0; i < coords.Length; i++)
-        //    {
-        //        var p = dto.Coordinates[i];
-        //        // Guard against bad data
-        //        if (p.Length < 2 || double.IsNaN(p[0]) || double.IsNaN(p[1]) ||
-        //            double.IsInfinity(p[0]) || double.IsInfinity(p[1]))
-        //            continue;
-
-        //        coords[i] = new Coordinate(p[0], p[1]); // X=lon, Y=lat
-        //    }
-        //    return GeometryFactory.CreateLineString(coords);
-        //}
-
     }
 }

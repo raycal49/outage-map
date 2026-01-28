@@ -34,22 +34,6 @@
     position: relative
 }
 
-/*.map-button {
-    top: 20px;
-    left: 260px;
-    position: absolute;
-}*/
-
-/*.mapboxgl-ctrl-geocoder {
-    position:center;*/
-    /*top: 10px;
-    right: 10px;*/
-/*}*/
-
-/*.mapboxgl-ctrl-top-left {
-    top: 40px !important;
-}*/
-
 /* ---------- Overlay Save button that looks/behaves like a Mapbox control ---------- */
 
 /* Tunables for layout */

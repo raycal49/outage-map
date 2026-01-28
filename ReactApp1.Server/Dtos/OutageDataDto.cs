@@ -5,10 +5,10 @@ namespace ReactApp1.Server.Dtos
 {
     public class OutageDataDto
     {
-        [JsonPropertyName("latitude")]//
+        [JsonPropertyName("latitude")]
         public double Latitude { get; set; }
 
-        [JsonPropertyName("longitude")]//
+        [JsonPropertyName("longitude")]
         public double Longitude { get; set; }
 
         [JsonPropertyName("id")]

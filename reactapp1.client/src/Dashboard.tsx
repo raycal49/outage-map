@@ -45,11 +45,8 @@ function Dashboard() {
 
             setRoutes(data);
 
-            // since we're going off of displayRouteDto, we only have id, name, distance, and duration no the below 2 attributes
-            // does not work. data doesnt have a totalRoutes attribute
             setTotalRoutes(data.totalRoutes);
 
-            // does not work. data doesn't have a totalPages attribute
             setTotalPages(data.totalPages);
 
             setLoading(false);
@@ -101,41 +98,5 @@ const RouteList = ({ displayRoutes = [] }: DisplayRouteListProps) => {
         </ul>
     );
 }
-
-//type PaginationProps = { totalPages: number, currentPage: number, paginate: (page: number) => void; }
-
-//const Pagination = ({ totalPages, currentPage, paginate }: PaginationProps) => {
-//    const pageNumbers = [];
-
-//    for (let i = 1; i <= totalPages; i++) {
-//        pageNumbers.push(i);
-//    }
-
-//    const handleClick = (e: React.MouseEvent, number: number) => {
-//        e.preventDefault(); // Prevent default anchor behavior
-//        paginate(number);
-//    };
-
-//    return (
-//        <nav>
-//            <ul className="pagination">
-//                {pageNumbers.map((number) => (
-//                    <li
-//                        key={number}
-//                        className={`page-item ${currentPage === number ? "active" : ""}`}
-//                    >
-//                        <a
-//                            onClick={(e) => handleClick(e, number)} // Added e.preventDefault()
-//                            href="!#"
-//                            className="page-link"
-//                        >
-//                            {number}
-//                        </a>
-//                    </li>
-//                ))}
-//            </ul>
-//        </nav>
-//    );
-//};
 
 export default Dashboard;

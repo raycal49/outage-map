@@ -28,7 +28,6 @@ namespace ReactApp1.Server.Infrastructure.Http
                 ["overview"] = "full",
                 ["annotations"] = "duration,distance,speed,congestion,congestion_numeric",
                 ["steps"] = "true",
-                //["waypoints_per_route"] = "true"
             };
 
             var updated = AddQueryString(uri.ToString(), queryString);
@@ -38,7 +37,6 @@ namespace ReactApp1.Server.Infrastructure.Http
         }
     }
        
-    // Add the missing MapBoxOptions class definition
     public class MapBoxOptions
     {
         public string Token { get; set; }

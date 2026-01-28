@@ -12,10 +12,11 @@ function MyMap() {
         zoom: 10.50
     });
 
-    const [start, setStart] = useState([-95.3698, 29.7604]); // Downtown Houston
+    //the initial coordinates are downtown houston. need to make them const
+    const [start, setStart] = useState([-95.3698, 29.7604]);
+
     const [end, setEnd] = useState([-95.6698, 29.9604]);
     const [coords, setCoords] = useState([]);
-    //const [name, setName] = useState<string>();
     const [dist, setDist] = useState<number>();
     const [dur, setDur] = useState<number>();
 
@@ -27,14 +28,11 @@ function MyMap() {
         const res = await fetch(`/Directions/Directions?${qs}`);
         const data = await res.json();
         const coords = data.routes[0].geometry.coordinates;
-        //const origin = data.routes[0].waypoints[0].name;
-        //const destination = data.routes[0].waypoints[data.routes[0].waypoints.length - 1].name;
         const distance = data.routes[0].distance;
         const duration = data.routes[0].duration;
 
         console.log(coords)
         setCoords(coords);
-        //setName(origin + " to " + destination);
         setDist(distance);
         setDur(duration);
 
@@ -58,12 +56,10 @@ function MyMap() {
         ]
     };
 
-    //type OutageFeature = GeoJSON.Feature<GeoJSON.Point, unknown>;
-
     type OutageProperties = {
         status?: string;
         numPeople?: number | string;
-        etrTime?: number | string; // epoch millis, based on your code
+        etrTime?: number | string;
     };
 
     type OutageFeature = GeoJSON.Feature<GeoJSON.Point, OutageProperties>;
@@ -74,7 +70,7 @@ function MyMap() {
 
     useEffect(() => {
         (async () => {
-            const res = await fetch("/OutageMap/OutageData");
+            const res = await fetch("/Outage/OutageData");
             if (!res.ok) throw new Error(`OutageData failed (${res.status})`);
             const fc = await res.json();
             setOutageFc(fc);
@@ -85,20 +81,18 @@ function MyMap() {
         id: "outage-points",
         type: "circle",
         paint: {
-            // simple styling — tweak as you like
             "circle-radius": 6,
             "circle-opacity": 0.85,
             "circle-stroke-width": 1,
             "circle-stroke-color": "#000",
 
-            // example: color by status if you have it in properties
             "circle-color": [
                 "match",
                 ["get", "status"],
                 "Pending Assessment", "#f59e0b",
                 "Crew Assessing", "#3b82f6",
                 "Planned Outage", "#ef4444",
-                "#10b981" // default
+                "#10b981"
             ]
         }
     };
@@ -142,9 +136,9 @@ function MyMap() {
         e.preventDefault();
 
         const input = window.prompt("Name this route:", name ?? "");
-        if (input == null) return;              // user hit Cancel
+        if (input == null) return;
         const routeName = input.trim();
-        if (!routeName) return;                 // empty string
+        if (!routeName) return;
 
         if (!routeName || dist == null || dur == null) return;
 
@@ -155,7 +149,7 @@ function MyMap() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload),
-                // credentials: "same-origin", // uncomment if your API uses cookies for auth
+
             });
 
             if (!res.ok) {
@@ -166,14 +160,14 @@ function MyMap() {
                 console.log("saved successfully!");
             }
 
-            // Your endpoint returns Ok() (empty 200). No JSON to parse.
+
         } catch (err) {
             console.error(err);
         }
     };
 
     const handleMapClick = (e: MapMouseEvent) => {
-        // If interactiveLayerIds is set correctly, react-map-gl provides features here
+
         const f = e.features?.[0] as OutageFeature | undefined;
         if (!f) return;
 
@@ -183,7 +177,6 @@ function MyMap() {
         setPopupLngLat({ lng, lat });
     };
 
-    // todo: have the geocoder switch between either end marker or start marker as far as which one set the destination to.
     return (
         <>
             <div className="mapdiv">
@@ -192,7 +185,6 @@ function MyMap() {
                     onMove={(evt) => setViewState(evt.viewState)}
                     mapStyle="mapbox://styles/mapbox/streets-v12"
                     mapboxAccessToken={MAPBOX_TOKEN}
-                    //style={{ width: "100vw", height: "100vh" }}
                     hash={true}
                     reuseMaps={true}
                     interactiveLayerIds={["outage-points"]}
@@ -244,10 +236,6 @@ function MyMap() {
                             })()}
                         </Popup>
                     )}
-
-                    {/*<Source id="endSource" type="geojson" data={endPoint}>*/}
-                    {/*    <Layer {...layerEndpoint} source="endSource" />*/}
-                    {/*</Source>*/}
 
                     <GeolocateControl ref={geoRef} />
                     <FullscreenControl />
