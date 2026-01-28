@@ -50,6 +50,10 @@ export default defineConfig({
             '^/OutageMap': {
                 target,
                 secure: false
+            },
+            '^/Directions': {
+                target,
+                secure: false
             }
         },
         port: 5173,

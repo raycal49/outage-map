@@ -24,7 +24,7 @@ function MyMap() {
     const getRoute = useCallback(async () => {
         const coordsParam = `${start[0]},${start[1]};${end[0]},${end[1]}`;
         const qs = new URLSearchParams({coordinates: coordsParam }).toString();
-        const res = await fetch(`MetroRoute/Directions?${qs}`);
+        const res = await fetch(`/Directions/Directions?${qs}`);
         const data = await res.json();
         const coords = data.routes[0].geometry.coordinates;
         //const origin = data.routes[0].waypoints[0].name;
