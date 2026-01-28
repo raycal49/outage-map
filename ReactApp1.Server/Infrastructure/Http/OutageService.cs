@@ -9,7 +9,6 @@ namespace ReactApp1.Server.Infrastructure.Http
     public class OutageService : IOutageService
     {
         private readonly HttpClient _httpClient;
-        private readonly string _token;
 
         public OutageService(HttpClient httpClient)
         {
