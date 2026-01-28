@@ -5,7 +5,7 @@ using ReactApp1.Server.Infrastructure.Http;
 
 namespace ReactApp1.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class DirectionsController : ControllerBase
     {
