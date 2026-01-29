@@ -39,7 +39,7 @@ function Dashboard() {
         const fetchPosts = async () => {
             setLoading(true);
 
-            const res = await fetch(`/MetroRoute/GetPage?pageNumber=${currentPage}&pageSize=${routesPerPage}`);
+            const res = await fetch(`/Dashboard/GetPage?pageNumber=${currentPage}&pageSize=${routesPerPage}`);
 
             const data = await res.json();
 

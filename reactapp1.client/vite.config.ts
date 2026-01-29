@@ -43,7 +43,7 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '^/MetroRoute': {
+            '^/Dashboard': {
                 target,
                 secure: false
             },
