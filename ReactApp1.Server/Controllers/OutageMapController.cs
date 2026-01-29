@@ -12,7 +12,7 @@ namespace ReactApp1.Server.Controllers
     {
         private readonly IOutageService _outageService;
 
-        public OutageMapController(IHttpClientFactory clientFactory, IOutageService outageService)
+        public OutageMapController(IOutageService outageService)
         {
             _outageService = outageService;
         }
